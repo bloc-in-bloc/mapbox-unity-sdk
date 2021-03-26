@@ -52,5 +52,10 @@
         "ProjectSettings/":true,
         "temp/":true,
         "Temp/":true
+    },
+    "files.associations": {
+        "*.js": "javascriptreact",
+        "locale": "cpp",
+        "string": "cpp"
     }
 }
