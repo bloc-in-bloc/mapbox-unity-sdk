@@ -10,10 +10,22 @@ namespace Mapbox.Examples {
 
     public class CustomSpawnOnMap : MonoBehaviour {
         [SerializeField]
-        AbstractMap _map;
-        Vector2d _location;
+        public AbstractMap _map;
+        public Vector2d _location {
+            get {
+                return Conversions.StringToLatLon ($"{_latitude},{_longitude}");
+            }
+        }
+
+        public Vector2 worldLocation {
+            get {
+                return Conversions.GeoToWorldPosition (_location, _map.CenterMercator).ToVector3xz ();
+            }
+        }
 
         public GameObject _spawnedObject;
+        public GameObject north;
+        public Bib.Compass compass;
         public AverageHeadingAlignmentStrategy averageHeadingAlignmentStrategy;
         public bool _isSpawn = false;
         public string _latitude;
@@ -28,19 +40,10 @@ namespace Mapbox.Examples {
         }
 
         public void Spawn () {
-            _location = Conversions.StringToLatLon ($"{_latitude},{_longitude}");
-             _spawnedObject.transform.position = Conversions.GeoToWorldPosition(_location, _map.CenterMercator).ToVector3xz();
-            // _spawnedObject.transform.position = _map.GeoToWorldPosition (_location, true);
-            // _spawnedObject.transform.rotation = averageHeadingAlignmentStrategy._targetRotation;
+            _spawnedObject.transform.position = _map.GeoToWorldPosition (_location, false);
+            _spawnedObject.transform.rotation = north.transform.rotation;
             _spawnedObject.SetActive (true);
             _isSpawn = true;
         }
-
-        // private void Update () {
-        //     if (!_isSpawn) {
-        //         return;
-        //     }
-        //     _spawnedObject.transform.localPosition = _map.GeoToWorldPosition (_location, true);
-        // }
     }
 }

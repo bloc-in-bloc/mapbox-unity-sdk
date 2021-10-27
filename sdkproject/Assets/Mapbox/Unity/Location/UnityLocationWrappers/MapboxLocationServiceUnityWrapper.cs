@@ -2,6 +2,7 @@ namespace Mapbox.Unity.Location
 {
 
 
+	using BlocInBloc;
 	using UnityEngine;
 
 
@@ -11,27 +12,43 @@ namespace Mapbox.Unity.Location
 	public class MapboxLocationServiceUnityWrapper : IMapboxLocationService
 	{
 
-		public bool isEnabledByUser { get { return Input.location.isEnabledByUser; } }
+		public bool isEnabledByUser { get { return true; } }
 
 
-		public LocationServiceStatus status { get { return Input.location.status; } }
-
-
-		public IMapboxLocationInfo lastData { get { return new MapboxLocationInfoUnityWrapper(Input.location.lastData); } }
-
-
-		public void Start(float desiredAccuracyInMeters, float updateDistanceInMeters)
+		public LocationServiceStatus status
 		{
-			Input.location.Start(desiredAccuracyInMeters, updateDistanceInMeters);
+			get
+			{
+				switch (NativeCompass.Instance.locationStatus)
+				{
+					case NativeCompass.LocationStatus.Starting:
+					case NativeCompass.LocationStatus.Initializing:
+						return LocationServiceStatus.Initializing;
+					case NativeCompass.LocationStatus.Failed:
+						return LocationServiceStatus.Failed;
+					case NativeCompass.LocationStatus.Running:
+						return LocationServiceStatus.Running;
+					default:
+						return LocationServiceStatus.Stopped;
+				}
+			}
 		}
 
 
-		public void Stop()
+		public IMapboxLocationInfo lastData { get { return new MapboxLocationInfoUnityWrapper (NativeCompass.Instance.locationLatitude, NativeCompass.Instance.locationLongitude, NativeCompass.Instance.locationAltitude, NativeCompass.Instance.locationHorizontalAccuracy, 0f, NativeCompass.Instance.locationTimestamp); } }
+
+
+		public void Start (float desiredAccuracyInMeters, float updateDistanceInMeters)
 		{
-			Input.location.Stop();
+			NativeCompass.Instance.Start ();
+			// Input.location.Start (desiredAccuracyInMeters, updateDistanceInMeters);
 		}
 
 
-
+		public void Stop ()
+		{
+			NativeCompass.Instance.Stop ();
+			// Input.location.Stop ();
+		}
 	}
 }

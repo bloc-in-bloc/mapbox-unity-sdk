@@ -1,36 +1,39 @@
 namespace Mapbox.Unity.Location
 {
-
-
-	using UnityEngine;
-
-
 	/// <summary>
 	/// Wrapper to use Unity's LocationInfo as MapboxLocationInfo
 	/// </summary>
 	public struct MapboxLocationInfoUnityWrapper : IMapboxLocationInfo
 	{
 
-		public MapboxLocationInfoUnityWrapper(LocationInfo locationInfo)
+		public MapboxLocationInfoUnityWrapper(double latitude, double longitude, double altitude, float horizontalAccuracy, float verticalAccuracy, double timestamp)
 		{
-			_locationInfo = locationInfo;
+			this._latitude = latitude;
+			this._longitude = longitude;
+			this._altitude = altitude;
+			this._horizontalAccuracy = horizontalAccuracy;
+			this._verticalAccuracy = verticalAccuracy;
+			this._timestamp = timestamp;
 		}
 
-		private LocationInfo _locationInfo;
+		private double _latitude;
+		private double _longitude;
+		private double _altitude;
+		private float _horizontalAccuracy;
+		private float _verticalAccuracy;
+		private double _timestamp;
 
 
-		public float latitude { get { return _locationInfo.latitude; } }
+		public double latitude { get { return _latitude; } }
 
-		public float longitude { get { return _locationInfo.longitude; } }
+		public double longitude { get { return _longitude; } }
 
-		public float altitude { get { return _locationInfo.altitude; } }
+		public double altitude { get { return _altitude; } }
 
-		public float horizontalAccuracy { get { return _locationInfo.horizontalAccuracy; } }
+		public float horizontalAccuracy { get { return _horizontalAccuracy; } }
 
-		public float verticalAccuracy { get { return _locationInfo.verticalAccuracy; } }
+		public float verticalAccuracy { get { return _verticalAccuracy; } }
 
-		public double timestamp { get { return _locationInfo.timestamp; } }
-
-
+		public double timestamp { get { return _timestamp; } }
 	}
 }
