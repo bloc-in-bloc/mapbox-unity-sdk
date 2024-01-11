@@ -32,7 +32,6 @@ obj.meta
 .vs/
 [Oo]bj/
 [Bb]in/
-packages/
 TestResults/
 StyleCop.Cache
 TestResult.xml
